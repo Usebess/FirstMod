@@ -1,6 +1,14 @@
 package net.Usebess.FirstMod;
 
 import com.mojang.logging.LogUtils;
+import net.Usebess.FirstMod.Screen.ModMenuTypes;
+import net.Usebess.FirstMod.Screen.SolarPanelScreen;
+import net.Usebess.FirstMod.block.Entity.ModBlockEntities;
+import net.Usebess.FirstMod.block.ModBlocks;
+import net.Usebess.FirstMod.item.ModCreativeTab;
+import net.Usebess.FirstMod.item.ModItems;
+import net.minecraft.client.gui.screens.MenuScreens;
+import net.minecraft.world.item.CreativeModeTabs;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.BuildCreativeModeTabContentsEvent;
@@ -28,6 +36,12 @@ public class FirstMod
     {
         IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
 
+        ModCreativeTab.Register(modEventBus);
+        ModBlocks.Register(modEventBus);
+        ModItems.Register(modEventBus);
+        ModBlockEntities.register(modEventBus);
+        ModMenuTypes.register(modEventBus);
+
         // Register the commonSetup method for modloading
         modEventBus.addListener(this::commonSetup);
 
@@ -48,6 +62,10 @@ public class FirstMod
     // Add the example block item to the building blocks tab
     private void addCreative(BuildCreativeModeTabContentsEvent event)
     {
+        if(event.getTabKey() == CreativeModeTabs.COMBAT)
+        {
+            event.accept(ModItems.SnowballGunItem);
+        }
     }
 
     // You can use SubscribeEvent and let the Event Bus discover methods to call
@@ -63,6 +81,7 @@ public class FirstMod
         @SubscribeEvent
         public static void onClientSetup(FMLClientSetupEvent event)
         {
+            MenuScreens.register(ModMenuTypes.SOLAR_PANEL_MENU.get(), SolarPanelScreen::new);
         }
     }
 }

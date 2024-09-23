@@ -1,0 +1,9 @@
+{
+  "variants":
+  {
+    "":
+    {
+      "model": "firstmod:block/solar_panel"
+    }
+  }
+}
